@@ -5,7 +5,7 @@ import 'package:quiz_covid_19_fluter_henrique/components/centered_message.dart';
 import 'package:quiz_covid_19_fluter_henrique/components/finish_dialog.dart';
 import 'package:quiz_covid_19_fluter_henrique/components/result_dialog.dart';
 import 'package:quiz_covid_19_fluter_henrique/controllers/quiz_controller.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class QuizPage extends StatefulWidget {
   @override
   _QuizPageState createState() => _QuizPageState();
@@ -56,7 +56,7 @@ class _QuizPageState extends State<QuizPage> {
     if (_controller.questionsNumber == 0)
       return CenteredMessage(
         'Sem questões',
-        icon: Icons.warning,
+        icon: FontAwesomeIcons.exclamationTriangle
       );
 
     return Column(
@@ -123,7 +123,7 @@ class _QuizPageState extends State<QuizPage> {
                 setState(() {
                   _scoreKeeper.add(
                     Icon(
-                      correct ? Icons.check : Icons.close,
+                      correct ? FontAwesomeIcons.check : FontAwesomeIcons.times,
                       color: correct ? Colors.green : Colors.red,
                     ),
                   );
