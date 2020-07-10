@@ -1,9 +1,8 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:quiz_covid_19_fluter_henrique/components/AnswerButton.dart';
+import 'package:quiz_covid_19_fluter_henrique/components/QuestionContainer.dart';
 import 'package:quiz_covid_19_fluter_henrique/components/centered_circular_progress.dart';
 import 'package:quiz_covid_19_fluter_henrique/components/centered_message.dart';
-import 'package:quiz_covid_19_fluter_henrique/components/finish_dialog.dart';
-import 'package:quiz_covid_19_fluter_henrique/components/result_dialog.dart';
 import 'package:quiz_covid_19_fluter_henrique/controllers/quiz_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class QuizPage extends StatefulWidget {
@@ -63,7 +62,7 @@ class _QuizPageState extends State<QuizPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        _buildQuestion(_controller.getQuestion()),
+        QuestionContainer(_controller.getQuestion()),
         _buildAnswerButton(_controller.getAnswer1()),
         _buildAnswerButton(_controller.getAnswer2()),
         _buildScoreKeeper(),
@@ -71,79 +70,8 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  _buildQuestion(String question) {
-    return Expanded(
-      flex: 5,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
-        child: Center(
-          child: Text(
-            question,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 25.0,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   _buildAnswerButton(String answer) {
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        child: GestureDetector(
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            color: Colors.blue,
-            child: Center(
-              child: AutoSizeText(
-                answer,
-                maxLines: 2,
-                minFontSize: 10.0,
-                maxFontSize: 32.0,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                ),
-              ),
-            ),
-          ),
-          onTap: () {
-            bool correct = _controller.correctAnswer(answer);
-
-            ResultDialog.show(
-              context,
-              question: _controller.question,
-              correct: correct,
-              onNext: () {
-                setState(() {
-                  _scoreKeeper.add(
-                    Icon(
-                      correct ? FontAwesomeIcons.check : FontAwesomeIcons.times,
-                      color: correct ? Colors.green : Colors.red,
-                    ),
-                  );
-
-                  if (_scoreKeeper.length < _controller.questionsNumber) {
-                    _controller.nextQuestion();
-                  } else {
-                    FinishDialog.show(
-                      context,
-                      hitNumber: _controller.hitNumber,
-                      questionNumber:  _controller.questionsNumber
-                    );
-                  }
-                });
-              },
-            );
-          },
-        ),
-      ),
-    );
+    return AnswerButton(_controller, _scoreKeeper, context, answer, this);
   }
 
   _buildScoreKeeper() {
@@ -155,3 +83,4 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 }
+
