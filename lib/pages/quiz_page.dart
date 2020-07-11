@@ -5,6 +5,7 @@ import 'package:quiz_covid_19_fluter_henrique/components/centered_circular_progr
 import 'package:quiz_covid_19_fluter_henrique/components/centered_message.dart';
 import 'package:quiz_covid_19_fluter_henrique/controllers/quiz_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 class QuizPage extends StatefulWidget {
   @override
   _QuizPageState createState() => _QuizPageState();
@@ -13,6 +14,7 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   final _controller = QuizController();
   List<Widget> _scoreKeeper = [];
+  final ScrollController _scrollController = ScrollController();
 
   bool _loading = true;
 
@@ -35,7 +37,8 @@ class _QuizPageState extends State<QuizPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey.shade900,
-        title: Text('QUIZ COVID-19 ( ${_scoreKeeper.length}/${_controller.questionsNumber} )'),
+        title: Text(
+            'QUIZ COVID-19 ( ${_scoreKeeper.length}/${_controller.questionsNumber} )'),
         centerTitle: true,
         elevation: 0.0,
       ),
@@ -53,10 +56,8 @@ class _QuizPageState extends State<QuizPage> {
     if (_loading) return CenteredCircularProgress();
 
     if (_controller.questionsNumber == 0)
-      return CenteredMessage(
-        'Sem questões',
-        icon: FontAwesomeIcons.exclamationTriangle
-      );
+      return CenteredMessage('Sem questões',
+          icon: FontAwesomeIcons.exclamationTriangle);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,16 +72,25 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   _buildAnswerButton(String answer) {
-    return AnswerButton(_controller, _scoreKeeper, context, answer, this);
+    return AnswerButton(
+        _controller, _scoreKeeper, context, answer, this, _scrollController);
   }
 
   _buildScoreKeeper() {
     return Expanded(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: _scoreKeeper,
+        child: Center(
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        itemCount: _scoreKeeper.length,
+        controller: _scrollController,
+        itemBuilder: (BuildContext, int) {
+          return Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Align(alignment: Alignment.center, child: _scoreKeeper[int]),
+          );
+        },
       ),
-    );
+    ));
   }
 }
-

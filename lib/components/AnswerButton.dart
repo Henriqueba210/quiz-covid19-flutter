@@ -10,17 +10,13 @@ import 'finish_dialog.dart';
 class AnswerButton extends StatelessWidget {
   final QuizController controller;
   final List<Widget> scoreKeeper;
+  final ScrollController _scrollController;
   final BuildContext context;
   final String answer;
   final State<QuizPage> quizPageState;
 
-  AnswerButton(
-   this.controller,
-    this.scoreKeeper,
-    this.context,
-    this.answer,
-    this.quizPageState
-  );
+  AnswerButton(this.controller, this.scoreKeeper, this.context, this.answer,
+      this.quizPageState, this._scrollController);
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +56,15 @@ class AnswerButton extends StatelessWidget {
                       color: correct ? Colors.green : Colors.red,
                     ),
                   );
+                  _scrollController.animateTo(scoreKeeper.length * 24.0,
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut);
                   if (scoreKeeper.length < controller.questionsNumber) {
                     controller.nextQuestion();
                   } else {
-                    FinishDialog.show(
-                      context,
-                      hitNumber: controller.hitNumber,
-                      questionNumber:  controller.questionsNumber
-                    );
+                    FinishDialog.show(context,
+                        hitNumber: controller.hitNumber,
+                        questionNumber: controller.questionsNumber);
                   }
                 });
               },
