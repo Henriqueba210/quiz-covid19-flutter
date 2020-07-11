@@ -64,16 +64,13 @@ class _QuizPageState extends State<QuizPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         QuestionContainer(_controller.getQuestion()),
-        _buildAnswerButton(_controller.getAnswer1()),
-        _buildAnswerButton(_controller.getAnswer2()),
+        AnswerButton(_controller, _scoreKeeper, context,
+            _controller.getAnswer1(), this, _scrollController),
+        AnswerButton(_controller, _scoreKeeper, context,
+            _controller.getAnswer2(), this, _scrollController),
         _buildScoreKeeper(),
       ],
     );
-  }
-
-  _buildAnswerButton(String answer) {
-    return AnswerButton(
-        _controller, _scoreKeeper, context, answer, this, _scrollController);
   }
 
   _buildScoreKeeper() {
